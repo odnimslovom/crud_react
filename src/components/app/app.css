@@ -1,6 +1,5 @@
 .app {
     margin: 0 auto;
-    width: 80vw;
     max-width: 1024px;
     display: flex;
     flex-direction: column;
