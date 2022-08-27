@@ -2,7 +2,7 @@ import './user-list.css';
 
 import UserListItem from "../user-list-item/user-list-item";
 
-const UserList = ({data, onDelete, onAdd}) => {
+const UserList = ({data, onDelete, onAdd, onToggleProp}) => {
 
     const elements = data.map(item => {
         const {id, ...itemProps} = item;
@@ -11,6 +11,9 @@ const UserList = ({data, onDelete, onAdd}) => {
                           {...itemProps}
                           onDelete={() => onDelete(id)}
                           onAdd={() => onAdd}
+                          onToggleProp={
+                              (evt) => onToggleProp(id, evt.currentTarget.getAttribute('data-toggle'))
+                          }
             />
         );
     });

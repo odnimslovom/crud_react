@@ -13,9 +13,10 @@ class App extends Component {
         super(props);
         this.state = {
             data: [
-                {id: nanoid(), name: "John B.", increase: false, salary: 900},
-                {id: nanoid(), name: "Alex K.", increase: false, salary: 1800},
-                {id: nanoid(), name: "Drew P.", increase: true, salary: 3600},]
+                {id: nanoid(), name: "John B.", rise: true, increase: false, salary: 900},
+                {id: nanoid(), name: "Alex A.", rise: false, increase: false, salary: 1800},
+                {id: nanoid(), name: "Sarah C.", rise: false, increase: false, salary: 2800},
+                {id: nanoid(), name: "Drew P.", rise: false, increase: true, salary: 3600},]
         }
     }
 
@@ -30,6 +31,7 @@ class App extends Component {
             id: nanoid(),
             name: name,
             increase: false,
+            rise: false,
             salary: salary,
         }
         this.setState(({data}) => ({
@@ -37,16 +39,35 @@ class App extends Component {
         }))
     }
 
+    onToggleProp= (id, prop) => {
+        this.setState(({data}) => ({
+                data: data.map(item => {
+                    if (item.id === id) {
+                        return {...item, [prop]: !item[prop]};
+                    }
+                    return item;
+                })
+            })
+        )
+    }
+
     render() {
+
+        const amountUsers = this.state.data.length;
+        const premiumUsers = this.state.data.filter(item => item.increase).length;
+
         return (
             <div className="app">
-                <AppInfo/>
+                <AppInfo amountUsers={amountUsers}
+                         premiumUsers={premiumUsers}
+                />
                 <div className="search-panel">
                     <SearchPanel/>
                     <AppFilter/>
                 </div>
                 <UserList data={this.state.data}
                           onDelete={this.deleteItem}
+                          onToggleProp={this.onToggleProp}
                 />
                 <UserAddForm onAdd={this.addItem}/>
             </div>
