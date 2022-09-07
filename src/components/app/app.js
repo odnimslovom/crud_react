@@ -16,7 +16,9 @@ class App extends Component {
                 {id: nanoid(), name: "John B.", rise: true, increase: false, salary: 900},
                 {id: nanoid(), name: "Alex A.", rise: false, increase: false, salary: 1800},
                 {id: nanoid(), name: "Sarah C.", rise: false, increase: false, salary: 2800},
-                {id: nanoid(), name: "Drew P.", rise: false, increase: true, salary: 3600},]
+                {id: nanoid(), name: "Drew P.", rise: false, increase: true, salary: 3600},
+            ],
+            term : '',
         }
     }
 
@@ -39,7 +41,7 @@ class App extends Component {
         }))
     }
 
-    onToggleProp= (id, prop) => {
+    onToggleProp = (id, prop) => {
         this.setState(({data}) => ({
                 data: data.map(item => {
                     if (item.id === id) {
@@ -51,10 +53,28 @@ class App extends Component {
         )
     }
 
+    searchUser = (items, term) => {
+        if (term.length === 0) {
+            return items;
+        }
+
+        return items.filter(item => {
+            return item.name.indexOf(term) > -1;
+        })
+    }
+
+    onUpdateSearch = (term) => {
+        this.setState({term})
+    }
+
     render() {
+
+        const {data, term} = this.state;
 
         const amountUsers = this.state.data.length;
         const premiumUsers = this.state.data.filter(item => item.increase).length;
+
+        const renderedData = this.searchUser(data, term);
 
         return (
             <div className="app">
@@ -62,10 +82,10 @@ class App extends Component {
                          premiumUsers={premiumUsers}
                 />
                 <div className="search-panel">
-                    <SearchPanel/>
+                    <SearchPanel onUpdateSearch={this.onUpdateSearch}/>
                     <AppFilter/>
                 </div>
-                <UserList data={this.state.data}
+                <UserList data={renderedData}
                           onDelete={this.deleteItem}
                           onToggleProp={this.onToggleProp}
                 />
