@@ -84,6 +84,12 @@ class App extends Component {
         this.setState({filterName})
     }
 
+    onChangeSalary = (value, id) => {
+        this.setState(({data}) => ({
+            data : data.map( item => item.id === id ? {...item, salary: value} : item)
+        }));
+    }
+
     render() {
 
         const {data, term, filterName} = this.state;

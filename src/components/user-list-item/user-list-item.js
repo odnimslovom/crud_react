@@ -3,7 +3,7 @@ import './user-list-item.css';
 
 const UserListItem = (props) => {
 
-    const {name, salary, onDelete, onToggleProp, increase, rise} = props;
+    const {id, name, salary, onDelete, onToggleProp, increase, rise, onChangeSalary} = props;
 
     let classNames = 'list-group-item d-flex justify-content-between';
 
@@ -20,6 +20,7 @@ const UserListItem = (props) => {
             <input type={'text'}
                    className={'list-group-item-input'}
                    defaultValue={`${salary}$`}
+                   onChange={(evt) => onChangeSalary(evt.target.value, id)}
             />
             <div className={'d-flex justify-content-center align-items-center'}>
                 <button
