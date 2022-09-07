@@ -18,7 +18,8 @@ class App extends Component {
                 {id: nanoid(), name: "Sarah C.", rise: false, increase: false, salary: 2800},
                 {id: nanoid(), name: "Drew P.", rise: false, increase: true, salary: 3600},
             ],
-            term : '',
+            term: '',
+            filterName: 'all-users',
         }
     }
 
@@ -57,7 +58,6 @@ class App extends Component {
         if (term.length === 0) {
             return items;
         }
-
         return items.filter(item => {
             return item.name.indexOf(term) > -1;
         })
@@ -67,14 +67,32 @@ class App extends Component {
         this.setState({term})
     }
 
+    filterUser = (items, filter) => {
+        switch (filter) {
+            case "all-users" :
+                return items;
+            case "increase-users" :
+                return items.filter(item => item.increase);
+            case "over-salary" :
+                return items.filter(item => item.salary > 1000);
+            default :
+                return items;
+        }
+    }
+
+    onUpdateFilter = (filterName) => {
+        this.setState({filterName})
+    }
+
     render() {
 
-        const {data, term} = this.state;
+        const {data, term, filterName} = this.state;
 
         const amountUsers = this.state.data.length;
         const premiumUsers = this.state.data.filter(item => item.increase).length;
 
-        const renderedData = this.searchUser(data, term);
+        const filteredData = this.filterUser(data, filterName);
+        const renderedData = this.searchUser(filteredData, term);
 
         return (
             <div className="app">
@@ -83,11 +101,15 @@ class App extends Component {
                 />
                 <div className="search-panel">
                     <SearchPanel onUpdateSearch={this.onUpdateSearch}/>
-                    <AppFilter/>
+                    <AppFilter
+                        filter={filterName}
+                        onUpdateFilter={this.onUpdateFilter}
+                    />
                 </div>
                 <UserList data={renderedData}
                           onDelete={this.deleteItem}
                           onToggleProp={this.onToggleProp}
+                          onChangeSalary={this.onChangeSalary}
                 />
                 <UserAddForm onAdd={this.addItem}/>
             </div>
